@@ -42,7 +42,7 @@ export class AuthService {
     let hash = (await scrypt(password, salt, 32)) as Buffer;
 
     if (storedHash !== hash.toString('hex')) {
-      throw new NotFoundException('Invalid credentials');
+      throw new BadRequestException('Invalid credentials');
     }
 
     return user;
