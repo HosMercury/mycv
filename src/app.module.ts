@@ -16,23 +16,25 @@ const cookieSession = require('cookie-session');
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    // TypeOrmModule.forRootAsync({
-    //   inject: [ConfigService],
-    //   useFactory: (config: ConfigService) => {
-    //     return {
-    //       type: 'sqlite',
-    //       database: config.get<string>('DB_NAME'),
-    //       synchronize: true,
-    //       entities: [User, Report],
-    //     };
-    //   },
-    // }),
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
-      entities: [User, Report],
-      synchronize: true,
+
+    // ✅ Postgres config via env
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.get<string>('DB_HOST'),
+        port: parseInt(config.get<string>('DB_PORT') ?? '5432', 10),
+        username: config.get<string>('DB_USER'),
+        password: config.get<string>('DB_PASS'),
+        database: config.get<string>('DB_NAME'),
+        entities: [User, Report],
+        // Use true only in development
+        synchronize: config.get<string>('DB_SYNC') === 'true',
+        // If your provider requires SSL, set DB_SSL=true in .env
+        ssl: config.get<string>('DB_SSL') === 'true',
+      }),
     }),
+
     UsersModule,
     ReportsModule,
   ],
@@ -41,9 +43,7 @@ const cookieSession = require('cookie-session');
     AppService,
     {
       provide: APP_PIPE,
-      useValue: new ValidationPipe({
-        whitelist: true,
-      }),
+      useValue: new ValidationPipe({ whitelist: true }),
     },
   ],
 })
