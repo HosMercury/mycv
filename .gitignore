@@ -1,4 +1,4 @@
-.env.environment
+.env.development
 .env.test
 .env.production
 

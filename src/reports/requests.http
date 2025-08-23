@@ -4,20 +4,20 @@ Content-Type: application/json
 
 {
     "make": "toyota",
-    "model": "mustang",
-    "year": 1981,
-    "milage": 15000,
+    "model": "corolla",
+    "year": 1980,
+    "milage": 1500,
     "lng": 45,
     "lat": 45,
     "price": 20000
 }
 
 ### Approve existing report 
-PATCH http://localhost:3000/reports/6
+PATCH http://localhost:3000/reports/1
 Content-Type: application/json
 
 {
-    "approved": true
+    "approved": false
 }
 
 ### Get an estimate for an exisiting vehicle

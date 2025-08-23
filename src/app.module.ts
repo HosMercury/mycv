@@ -34,7 +34,6 @@ const cookieSession = require('cookie-session');
         ssl: config.get<string>('DB_SSL') === 'true',
       }),
     }),
-
     UsersModule,
     ReportsModule,
   ],
